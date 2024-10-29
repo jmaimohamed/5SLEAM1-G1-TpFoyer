@@ -6,13 +6,20 @@ import tn.esprit.tpfoyer.entity.Etudiant;
 import tn.esprit.tpfoyer.repository.EtudiantRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class EtudiantServiceImpl implements IEtudiantService {
 
     private final EtudiantRepository etudiantRepository;
+    public Optional<Etudiant> findById(Long id) {
+        return etudiantRepository.findById(id);
+    }
 
+    public Etudiant save(Etudiant etudiant) {
+        return etudiantRepository.save(etudiant);
+    }
     public List<Etudiant> retrieveAllEtudiants() {
         return etudiantRepository.findAll();
     }

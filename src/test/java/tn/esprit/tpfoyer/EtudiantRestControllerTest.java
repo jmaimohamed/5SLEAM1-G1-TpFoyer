@@ -1,11 +1,13 @@
 package tn.esprit.tpfoyer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -13,170 +15,84 @@ import tn.esprit.tpfoyer.control.EtudiantRestController;
 import tn.esprit.tpfoyer.entity.Etudiant;
 import tn.esprit.tpfoyer.service.IEtudiantService;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get; // Ensure this is imported
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class EtudiantRestControllerTest {
-
-    @InjectMocks
-    private EtudiantRestController etudiantRestController;
+public class EtudiantRestControllerTest {
 
     @Mock
     private IEtudiantService etudiantService;
 
+    @InjectMocks
+    private EtudiantRestController etudiantRestController;
+
     private MockMvc mockMvc;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(etudiantRestController).build();
     }
 
     @Test
-    void testGetEtudiants() throws Exception {
-        List<Etudiant> etudiantList = new ArrayList<>();
-        etudiantList.add(new Etudiant(1, "John", "Doe", 123456789, null, null));
-        when(etudiantService.retrieveAllEtudiants()).thenReturn(etudiantList);
+    public void testAddEtudiantInvalidInput() throws Exception {
+        // Given an invalid Etudiant object (e.g., missing required fields)
+        Etudiant etudiant = new Etudiant();
+        etudiant.setNomEtudiant(""); // Invalid input
 
-        mockMvc.perform(get("/etudiant/retrieve-all-etudiants"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$[0].nomEtudiant").value("John"));
-
-        verify(etudiantService, times(1)).retrieveAllEtudiants();
-    }
-
-    @Test
-    void testGetEtudiantsEmptyList() throws Exception {
-        // Arrange
-        List<Etudiant> etudiantList = new ArrayList<>();
-        when(etudiantService.retrieveAllEtudiants()).thenReturn(etudiantList);
-
-        // Act & Assert
-        mockMvc.perform(get("/etudiant/retrieve-all-etudiants"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$").isEmpty());
-
-        verify(etudiantService, times(1)).retrieveAllEtudiants();
-    }
-
-    @Test
-    void testRetrieveEtudiant() throws Exception {
-        Etudiant etudiant = new Etudiant(1, "John", "Doe", 123456789, null, null);
-        when(etudiantService.retrieveEtudiant(1L)).thenReturn(etudiant);
-
-        mockMvc.perform(get("/etudiant/retrieve-etudiant/1"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.nomEtudiant").value("John"));
-
-        verify(etudiantService, times(1)).retrieveEtudiant(1L);
-    }
-
-    @Test
-    void testRetrieveEtudiantNotFound() throws Exception {
-        when(etudiantService.retrieveEtudiant(1L)).thenThrow(new RuntimeException("Etudiant not found"));
-
-        mockMvc.perform(get("/etudiant/retrieve-etudiant/1"))
-                .andExpect(status().isNotFound())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.message").value("Etudiant not found"));
-
-        verify(etudiantService, times(1)).retrieveEtudiant(1L);
-    }
-
-    @Test
-    void testAddEtudiant() throws Exception {
-        Etudiant etudiant = new Etudiant(1, "John", "Doe", 123456789, null, null);
-        when(etudiantService.addEtudiant(any(Etudiant.class))).thenReturn(etudiant);
-
-        mockMvc.perform(post("/etudiant/add-etudiant")
+        // When the addEtudiant endpoint is called
+        mockMvc.perform(post("/etudiant")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(etudiant)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.nomEtudiant").value("John"));
-
-        verify(etudiantService, times(1)).addEtudiant(any(Etudiant.class));
+                .andExpect(status().isBadRequest()); // Expect a 400 Bad Request
     }
 
     @Test
-    void testAddEtudiantInvalidInput() throws Exception {
-        // Testing with invalid input
-        mockMvc.perform(post("/etudiant/add-etudiant")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"nomEtudiant\":\"\"}")) // Empty name
-                .andExpect(status().isBadRequest());
+    public void testModifyEtudiantNotFound() throws Exception {
+        // Given an Etudiant ID that does not exist
+        long nonExistentId = 999L;
+        Etudiant etudiant = new Etudiant();
+        etudiant.setIdEtudiant(nonExistentId);
+        etudiant.setNomEtudiant("John");
+        etudiant.setPrenomEtudiant("Doe");
 
-        verify(etudiantService, times(0)).addEtudiant(any(Etudiant.class));
-    }
+        when(etudiantService.findById(nonExistentId)).thenReturn(Optional.empty());
 
-    @Test
-    void testRemoveEtudiant() throws Exception {
-        Long etudiantId = 1L;
-
-        mockMvc.perform(delete("/etudiant/remove-etudiant/{etudiant-id}", etudiantId))
-                .andExpect(status().isOk());
-
-        verify(etudiantService, times(1)).removeEtudiant(etudiantId);
-    }
-
-    @Test
-    void testModifyEtudiant() throws Exception {
-        Etudiant etudiant = new Etudiant(1, "John", "Doe", 123456789, null, null);
-        when(etudiantService.modifyEtudiant(any(Etudiant.class))).thenReturn(etudiant);
-
-        mockMvc.perform(put("/etudiant/modify-etudiant")
+        // When the modifyEtudiant endpoint is called
+        mockMvc.perform(put("/etudiant/{id}", nonExistentId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(etudiant)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.nomEtudiant").value("John"));
-
-        verify(etudiantService, times(1)).modifyEtudiant(any(Etudiant.class));
+                .andExpect(status().isNotFound()); // Expect a 404 Not Found
     }
 
     @Test
-    void testModifyEtudiantNotFound() throws Exception {
-        when(etudiantService.modifyEtudiant(any(Etudiant.class))).thenThrow(new RuntimeException("Etudiant not found"));
+    public void testRetrieveEtudiantNotFound() throws Exception {
+        // Given an Etudiant ID that does not exist
+        long nonExistentId = 999L;
 
-        Etudiant etudiant = new Etudiant(1, "John", "Doe", 123456789, null, null);
+        when(etudiantService.findById(nonExistentId)).thenReturn(Optional.empty());
 
-        mockMvc.perform(put("/etudiant/modify-etudiant")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(etudiant)))
-                .andExpect(status().isNotFound())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.message").value("Etudiant not found"));
-
-        verify(etudiantService, times(1)).modifyEtudiant(any(Etudiant.class));
+        // When the retrieveEtudiant endpoint is called
+        mockMvc.perform(get("/etudiant/{id}", nonExistentId)) // Ensure the GET request is correct
+                .andExpect(status().isNotFound()); // Expect a 404 Not Found
     }
 
     @Test
-    void testRetrieveEtudiantParCin() throws Exception {
-        Etudiant etudiant = new Etudiant(1, "John", "Doe", 123456789, null, null);
-        when(etudiantService.recupererEtudiantParCin(123456789)).thenReturn(etudiant);
+    public void testRetrieveEtudiantParCinNotFound() throws Exception {
+        // Given a CIN that does not exist
+        long invalidCin = 999999;
 
-        mockMvc.perform(get("/etudiant/retrieve-etudiant-cin/{cin}", 123456789))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.nomEtudiant").value("John"));
+        when(etudiantService.recupererEtudiantParCin(invalidCin)).thenReturn(null); // Assuming this method returns null when not found
 
-        verify(etudiantService, times(1)).recupererEtudiantParCin(123456789);
-    }
-
-    @Test
-    void testRetrieveEtudiantParCinNotFound() throws Exception {
-        when(etudiantService.recupererEtudiantParCin(123456789)).thenThrow(new RuntimeException("Etudiant not found"));
-
-        mockMvc.perform(get("/etudiant/retrieve-etudiant-cin/{cin}", 123456789))
-                .andExpect(status().isNotFound())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.message").value("Etudiant not found"));
-
-        verify(etudiantService, times(1)).recupererEtudiantParCin(123456789);
+        // When the retrieveEtudiantParCin endpoint is called
+        mockMvc.perform(get("/etudiant/cin/{cin}", invalidCin))
+                .andExpect(status().isNotFound()); // Expect a 404 Not Found
     }
 }

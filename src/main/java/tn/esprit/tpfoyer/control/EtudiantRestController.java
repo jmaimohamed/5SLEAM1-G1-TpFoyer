@@ -1,6 +1,7 @@
 package tn.esprit.tpfoyer.control;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import tn.esprit.tpfoyer.entity.Etudiant;
 import tn.esprit.tpfoyer.service.IEtudiantService;
@@ -44,5 +45,14 @@ public class EtudiantRestController {
     @PutMapping("/modify-etudiant")
     public Etudiant modifyEtudiant(@RequestBody Etudiant c) {
         return etudiantService.modifyEtudiant(c);
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<Etudiant> modifyEtudiant(@PathVariable Long id, @RequestBody Etudiant etudiantDetails) {
+        Etudiant etudiant = etudiantService.findById(id)
+                .orElseThrow(() -> new RuntimeException("Etudiant not found"));
+        // Update the details
+        etudiant.setNomEtudiant(etudiantDetails.getNomEtudiant());
+        etudiantService.save(etudiant);
+        return ResponseEntity.ok(etudiant);
     }
 }
