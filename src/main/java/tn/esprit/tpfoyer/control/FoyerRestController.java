@@ -12,24 +12,26 @@ import java.util.List;
 @RequestMapping("/foyer")
 public class FoyerRestController {
 
-    private final IFoyerService foyerService;
+    IFoyerService foyerService;
 
     // http://localhost:8089/tpfoyer/foyer/retrieve-all-foyers
     @GetMapping("/retrieve-all-foyers")
     public List<Foyer> getFoyers() {
-        return foyerService.retrieveAllFoyers(); // Directly return the result
+        List<Foyer> listFoyers = foyerService.retrieveAllFoyers();
+        return listFoyers;
     }
-
     // http://localhost:8089/tpfoyer/foyer/retrieve-foyer/8
     @GetMapping("/retrieve-foyer/{foyer-id}")
     public Foyer retrieveFoyer(@PathVariable("foyer-id") Long fId) {
-        return foyerService.retrieveFoyer(fId); // Directly return the result
+        Foyer foyer = foyerService.retrieveFoyer(fId);
+        return foyer;
     }
 
     // http://localhost:8089/tpfoyer/foyer/add-foyer
     @PostMapping("/add-foyer")
     public Foyer addFoyer(@RequestBody Foyer f) {
-        return foyerService.addFoyer(f); // Directly return the result
+        Foyer foyer = foyerService.addFoyer(f);
+        return foyer;
     }
 
     // http://localhost:8089/tpfoyer/foyer/remove-foyer/{foyer-id}
@@ -41,6 +43,8 @@ public class FoyerRestController {
     // http://localhost:8089/tpfoyer/foyer/modify-foyer
     @PutMapping("/modify-foyer")
     public Foyer modifyFoyer(@RequestBody Foyer f) {
-        return foyerService.modifyFoyer(f); // Directly return the result
+        Foyer foyer = foyerService.modifyFoyer(f);
+        return foyer;
     }
+
 }

@@ -13,13 +13,7 @@ import java.util.Optional;
 public class EtudiantServiceImpl implements IEtudiantService {
 
     private final EtudiantRepository etudiantRepository;
-    public Optional<Etudiant> findById(Long id) {
-        return etudiantRepository.findById(id);
-    }
 
-    public Etudiant save(Etudiant etudiant) {
-        return etudiantRepository.save(etudiant);
-    }
     public List<Etudiant> retrieveAllEtudiants() {
         return etudiantRepository.findAll();
     }
@@ -44,5 +38,15 @@ public class EtudiantServiceImpl implements IEtudiantService {
 
     public Etudiant recupererEtudiantParCin(long cin) {
         return etudiantRepository.findEtudiantByCinEtudiant(cin);
+    }
+
+    @Override
+    public Optional<Etudiant> findById(Long id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Etudiant save(Etudiant etudiant) {
+        return null;
     }
 }
