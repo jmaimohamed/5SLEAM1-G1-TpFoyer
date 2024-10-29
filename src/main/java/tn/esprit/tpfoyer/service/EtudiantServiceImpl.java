@@ -1,6 +1,5 @@
 package tn.esprit.tpfoyer.service;
 
-
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import tn.esprit.tpfoyer.entity.Etudiant;
@@ -12,29 +11,31 @@ import java.util.List;
 @AllArgsConstructor
 public class EtudiantServiceImpl implements IEtudiantService {
 
-
-    EtudiantRepository etudiantRepository;
+    private final EtudiantRepository etudiantRepository;
 
     public List<Etudiant> retrieveAllEtudiants() {
         return etudiantRepository.findAll();
     }
+
     public Etudiant retrieveEtudiant(Long etudiantId) {
-        return etudiantRepository.findById(etudiantId).get();
+        // Check if the Etudiant exists, or throw an exception if it doesn't
+        return etudiantRepository.findById(etudiantId)
+                .orElseThrow(() -> new RuntimeException("Etudiant not found with id: " + etudiantId));
     }
+
     public Etudiant addEtudiant(Etudiant c) {
         return etudiantRepository.save(c);
     }
+
     public Etudiant modifyEtudiant(Etudiant c) {
         return etudiantRepository.save(c);
     }
+
     public void removeEtudiant(Long etudiantId) {
         etudiantRepository.deleteById(etudiantId);
     }
-    public Etudiant recupererEtudiantParCin(long cin)
-    {
+
+    public Etudiant recupererEtudiantParCin(long cin) {
         return etudiantRepository.findEtudiantByCinEtudiant(cin);
     }
-
-
-
 }
