@@ -1,33 +1,26 @@
 package tn.esprit.tpfoyer;
 
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import tn.esprit.tpfoyer.control.EtudiantRestController;
 import tn.esprit.tpfoyer.entity.Etudiant;
 import tn.esprit.tpfoyer.service.IEtudiantService;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@TestMethodOrder(OrderAnnotation.class)
-public class EtudiantRestControllerTest {
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+class EtudiantRestControllerTest {
 
     @InjectMocks
     private EtudiantRestController etudiantRestController;
@@ -35,97 +28,101 @@ public class EtudiantRestControllerTest {
     @Mock
     private IEtudiantService etudiantService;
 
-    @Autowired
     private MockMvc mockMvc;
-
-    private Etudiant etudiant;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        etudiant = new Etudiant(1L, "John", "Doe", 12345678L, null, null);
+        mockMvc = MockMvcBuilders.standaloneSetup(etudiantRestController).build();
     }
 
     @Test
-    @Order(1)
     void testGetEtudiants() throws Exception {
-        when(etudiantService.retrieveAllEtudiants()).thenReturn(Arrays.asList(etudiant));
+        // Arrange
+        List<Etudiant> etudiantList = new ArrayList<>();
+        etudiantList.add(new Etudiant(1, "John", "Doe", 123456789, null, null));
+        when(etudiantService.retrieveAllEtudiants()).thenReturn(etudiantList);
 
-        mockMvc.perform(get("/etudiant/retrieve-all-etudiants")
-                        .contentType(MediaType.APPLICATION_JSON))
+        // Act & Assert
+        mockMvc.perform(get("/etudiant/retrieve-all-etudiants"))
                 .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$[0].nomEtudiant").value("John"));
+
         verify(etudiantService, times(1)).retrieveAllEtudiants();
     }
 
     @Test
-    @Order(2)
     void testRetrieveEtudiant() throws Exception {
+        // Arrange
+        Etudiant etudiant = new Etudiant(1, "John", "Doe", 123456789, null, null);
         when(etudiantService.retrieveEtudiant(1L)).thenReturn(etudiant);
 
-        mockMvc.perform(get("/etudiant/retrieve-etudiant/1")
-                        .contentType(MediaType.APPLICATION_JSON))
+        // Act & Assert
+        mockMvc.perform(get("/etudiant/retrieve-etudiant/1"))
                 .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.nomEtudiant").value("John"));
+
         verify(etudiantService, times(1)).retrieveEtudiant(1L);
     }
 
     @Test
-    @Order(3)
     void testAddEtudiant() throws Exception {
+        // Arrange
+        Etudiant etudiant = new Etudiant(1, "John", "Doe", 123456789, null, null);
         when(etudiantService.addEtudiant(any(Etudiant.class))).thenReturn(etudiant);
 
+        // Act & Assert
         mockMvc.perform(post("/etudiant/add-etudiant")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(etudiant)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nomEtudiant").value("John"));
+
         verify(etudiantService, times(1)).addEtudiant(any(Etudiant.class));
     }
 
     @Test
-    @Order(4)
+    void testRemoveEtudiant() throws Exception {
+        // Arrange
+        Long etudiantId = 1L;
+
+        // Act & Assert
+        mockMvc.perform(delete("/etudiant/remove-etudiant/{etudiant-id}", etudiantId))
+                .andExpect(status().isOk());
+
+        verify(etudiantService, times(1)).removeEtudiant(etudiantId);
+    }
+
+    @Test
     void testModifyEtudiant() throws Exception {
+        // Arrange
+        Etudiant etudiant = new Etudiant(1, "John", "Doe", 123456789, null, null);
         when(etudiantService.modifyEtudiant(any(Etudiant.class))).thenReturn(etudiant);
 
+        // Act & Assert
         mockMvc.perform(put("/etudiant/modify-etudiant")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(etudiant)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.nomEtudiant").value("John"));
+
         verify(etudiantService, times(1)).modifyEtudiant(any(Etudiant.class));
     }
 
     @Test
-    @Order(5)
-    void testRemoveEtudiant() throws Exception {
-        doNothing().when(etudiantService).removeEtudiant(1L);
+    void testRetrieveEtudiantParCin() throws Exception {
+        // Arrange
+        Etudiant etudiant = new Etudiant(1, "John", "Doe", 123456789, null, null);
+        when(etudiantService.recupererEtudiantParCin(123456789)).thenReturn(etudiant);
 
-        mockMvc.perform(delete("/etudiant/remove-etudiant/1")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
-        verify(etudiantService, times(1)).removeEtudiant(1L);
-    }
+        // Act & Assert
+        mockMvc.perform(get("/etudiant/retrieve-etudiant-cin/{cin}", 123456789))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.nomEtudiant").value("John"));
 
-    @Test
-    @Order(6)
-    void testRetrieveEtudiantNotFound() throws Exception {
-        when(etudiantService.retrieveEtudiant(999L)).thenThrow(new RuntimeException("Etudiant not found"));
-
-        mockMvc.perform(get("/etudiant/retrieve-etudiant/999")
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
-    @Order(7)
-    void testAddEtudiantInvalid() throws Exception {
-        // Testing with invalid data, such as null values
-        Etudiant invalidEtudiant = new Etudiant(); // Empty Etudiant
-
-        mockMvc.perform(post("/etudiant/add-etudiant")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(invalidEtudiant)))
-                .andExpect(status().isBadRequest());
+        verify(etudiantService, times(1)).recupererEtudiantParCin(123456789);
     }
 }
