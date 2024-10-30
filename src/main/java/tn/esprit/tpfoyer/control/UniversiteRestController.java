@@ -20,6 +20,23 @@ public class UniversiteRestController {
         List<Universite> listUniversites = universiteService.retrieveAllUniversites();
         return listUniversites;
     }
+
+
+
+    // Nouveau point d’accès pour rechercher par adresse
+    @GetMapping("/retrieve-universite-by-adresse/{adresse}")
+    public List<Universite> retrieveUniversiteByAdresse(@PathVariable("adresse") String adresse) {
+        return universiteService.retrieveByAdresse(adresse);
+    }
+    // Nouveau point d’accès pour rechercher par nom
+    @GetMapping("/retrieve-universite-by-nom/{nom}")
+    public Universite retrieveUniversiteByNom(@PathVariable("nom") String nom) {
+        return universiteService.retrieveByNom(nom);
+    }
+
+
+
+
     // http://localhost:8089/tpfoyer/universite/retrieve-universite/8
     @GetMapping("/retrieve-universite/{universite-id}")
     public Universite retrieveUniversite(@PathVariable("universite-id") Long uId) {
