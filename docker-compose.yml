@@ -12,7 +12,7 @@ services:
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/db?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&useSSL=false
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: rootpassword
+      SPRING_DATASOURCE_PASSWORD: 12345
     networks:
       - my-network  # Specify the network
 
@@ -20,7 +20,7 @@ services:
   mysql-db:
     image: mysql:5.7  # Use MySQL 5.7
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword  # Set MySQL root password
+      MYSQL_ROOT_PASSWORD: 12345 # Set MySQL root password
       MYSQL_DATABASE: db  # Database name
     ports:
       - "3306:3306"  # Expose MySQL port
