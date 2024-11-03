@@ -28,13 +28,5 @@ services:
         "spring.jpa.hibernate.ddl-auto": "update"
       }'
 
-  prometheus:
-    image: prom/prometheus
-    container_name: prometheus
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-    ports:
-      - "9090:9090"
-
 volumes:
   db_data:
