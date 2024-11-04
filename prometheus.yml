@@ -1,8 +1,41 @@
+# Global settings
 global:
-  scrape_interval: 15s  # How often to scrape targets by default.
+  scrape_interval: 15s  # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s  # Evaluate rules every 15 seconds. Default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
 
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          # - alertmanager:9093
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+# - "first_rules.yml"
+# - "second_rules.yml"
+
+# Scrape configurations
 scrape_configs:
-  - job_name: 'spring-boot-app'
+  # Scrape Prometheus itself
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  # Scrape Jenkins
+  - job_name: "jenkins"
+    metrics_path: /prometheus
+    static_configs:
+      - targets: ["172.17.0.1:8080"]
+
+  # Scrape Spring Boot application
+  - job_name: "springboot-app"
     metrics_path: '/actuator/prometheus'
     static_configs:
-      - targets: ['127.17.0.2:8089']  # Use the service name and port of your Spring Boot app.
+      - targets: ["172.24.0.3:8089"]  # IP address of app-foyer
+
+  # Scrape MySQL database
+  - job_name: "mysql-db"
+    static_configs:
+      - targets: ["172.24.0.2:3306"]  # IP address of mysqldb
