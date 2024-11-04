@@ -27,15 +27,15 @@ scrape_configs:
   - job_name: "jenkins"
     metrics_path: /prometheus
     static_configs:
-      - targets: ["172.17.0.1:8080"]
+      - targets: ["localhost:8080"]
 
   # Scrape Spring Boot application
   - job_name: "springboot-app"
     metrics_path: '/actuator/prometheus'
     static_configs:
-      - targets: ["172.24.0.3:8089"]  # IP address of app-foyer
+      - targets: ["localhost:8089"]  # IP address of app-foyer
 
   # Scrape MySQL database
   - job_name: "mysql-db"
     static_configs:
-      - targets: ["172.24.0.2:3306"]  # IP address of mysqldb
+      - targets: ["localhost:3306"]  # IP address of mysqldb
