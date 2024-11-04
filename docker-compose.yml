@@ -13,8 +13,8 @@ services:
       - db_data:/var/lib/mysql
 
   app-foyer:
-    image: tp-foyer-app
-    container_name: app-foyer
+    image: tp-foyer-app1
+    container_name: app-foyer1
     depends_on:
       - mysqldb
     ports:
