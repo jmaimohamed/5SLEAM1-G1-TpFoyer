@@ -27,9 +27,9 @@ scrape_configs:
   - job_name: "jenkins"
     metrics_path: /prometheus
     static_configs:
-      - targets: ["localhost:8080"]
+      - targets: ["127.17.0.1:8080"]
 
   - job_name: 'springboot-app'
     metrics_path: '/tpfoyer/actuator/prometheus'
     static_configs:
-      - targets: ['app-foyer:8089']
+      - targets: ['127.17.0.4:8089']
