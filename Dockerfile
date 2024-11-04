@@ -14,5 +14,5 @@ COPY target/tp-foyer-5.1.0.jar /app/tp-foyer-5.1.0.jar
 EXPOSE 8089
 
 # Define the entry point for the application
-ENTRYPOINT ["java", "-jar", "/app/tp-foyer-5.0.1.jar"]
+ENTRYPOINT ["java", "-jar", "/app/tp-foyer-5.1.0.jar"]
 
