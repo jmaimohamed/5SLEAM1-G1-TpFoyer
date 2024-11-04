@@ -29,13 +29,8 @@ scrape_configs:
     static_configs:
       - targets: ["localhost:8080"]
 
-  # Scrape Spring Boot application
-  - job_name: "springboot-app"
-    metrics_path: '/actuator/prometheus'
-    static_configs:
-      - targets: ["localhost:8089"]  # IP address of app-foyer
 
-  # Scrape MySQL database
-  - job_name: "mysql-db"
+  - job_name: 'springboot-app'
     static_configs:
-      - targets: ["localhost:3306"]  # IP address of mysqldb
+       - targets: [ 'localhost:8089' ]
+    metrics_path: '/tpfoyer/actuator/prometheus'
