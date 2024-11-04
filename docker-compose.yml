@@ -28,38 +28,27 @@ services:
             "password": "root"
           },
           "jpa": {
-            "properties": {
-              "hibernate": {
-                "dialect": "org.hibernate.dialect.MySQLDialect"
-              }
-            },
             "hibernate": {
-              "ddl-auto": "update"
+              "ddl-auto": "update",
+              "properties": {
+                "hibernate.dialect": "org.hibernate.dialect.MySQLDialect"
+              }
             }
           }
         },
         "management": {
           "endpoints": {
             "web": {
+              "base-path": "/actuator",
               "exposure": {
                 "include": "*"
-              },
-              "base-path": "/actuator"
-            },
+              }
+            }
+          },
+          "endpoint": {
             "health": {
               "show-details": "always"
-            },
-            "prometheus": {
-              "enabled": true
-            },
-            "metrics": {
-              "enabled": true
             }
-          }
-        },
-        "logging": {
-          "level": {
-            "org.springframework.boot.actuate": "DEBUG"
           }
         }
       }'
