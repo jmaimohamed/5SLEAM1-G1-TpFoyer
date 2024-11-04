@@ -36,6 +36,11 @@ services:
             }
           }
         },
+        "server": {
+          "servlet": {
+            "context-path": "/tpfoyer"
+          }
+        },
         "management": {
           "endpoints": {
             "web": {
@@ -48,6 +53,9 @@ services:
           "endpoint": {
             "health": {
               "show-details": "always"
+            },
+            "prometheus": {
+              "enabled": true
             }
           }
         }
