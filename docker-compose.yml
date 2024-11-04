@@ -21,45 +21,17 @@ services:
       - "8089:8089"
     environment:
       SPRING_APPLICATION_JSON: '{
-        "spring": {
-          "datasource": {
-            "url": "jdbc:mysql://mysqldb:3306/foyer_db?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false",
-            "username": "root",
-            "password": "root"
-          },
-          "jpa": {
-            "hibernate": {
-              "ddl-auto": "update",
-              "properties": {
-                "hibernate.dialect": "org.hibernate.dialect.MySQLDialect"
-              }
-            }
-          }
-        },
-        "server": {
-          "servlet": {
-            "context-path": "/tpfoyer"
-          }
-        },
-        "management": {
-          "endpoints": {
-            "web": {
-              "base-path": "/actuator",
-              "exposure": {
-                "include": "*"
-              }
-            }
-          },
-          "endpoint": {
-            "health": {
-              "show-details": "always"
-            },
-            "prometheus": {
-              "enabled": true
-            }
-          }
-        }
-      }'
+        "spring.datasource.url": "jdbc:mysql://mysqldb:3306/foyer_db?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false",
+        "spring.datasource.username": "root",
+        "spring.datasource.password": "root",
+        "spring.jpa.properties.hibernate.dialect": "org.hibernate.dialect.MySQLDialect",
+        "spring.jpa.hibernate.ddl-auto": "update",
+        "management.endpoints.web.base-path": "/actuator",
+        "management.endpoints.web.exposure.include": "*",
+        "management.endpoint.health.show-details": "always",
+        "management.endpoint.prometheus.enabled":"true",
+        "management.endpoint.metrics.enabled":"true"
+        }'
 
   prometheus:
     image: prom/prometheus
