@@ -1,21 +1,9 @@
-# Global settings
 global:
-  scrape_interval: 15s  # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  scrape_interval: 15s  # How often to scrape targets by default
 
-# Scrape configurations
 scrape_configs:
-  # Scrape Prometheus itself
-  - job_name: "prometheus"
+  - job_name: 'spring-boot-app'  # Name for the job
+    metrics_path: '/tpfoyer/actuator/prometheus'  # Path to scrape metrics from
     static_configs:
-      - targets: ["localhost:9090"]
-
-  # Scrape Jenkins
-  - job_name: "jenkins"
-    metrics_path: /prometheus
-    static_configs:
-      - targets: ["127.17.0.1:8080"]
-
-  - job_name: 'springboot-app'
-    metrics_path: '/tpfoyer/actuator/prometheus'
-    static_configs:
-      - targets: ['127.17.0.4:8089']
+      - targets:
+          - '192.168.207.129:8089'  # Replace with your VM's IP address and port
