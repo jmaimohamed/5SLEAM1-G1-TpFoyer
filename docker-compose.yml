@@ -29,6 +29,7 @@ services:
         "management.endpoints.web.base-path": "/actuator",
         "management.endpoints.web.exposure.include": "*",
         "management.endpoint.health.show-details": "always",
+        "server.servlet.context-path":"/tpfoyer"
         "management.endpoint.prometheus.enabled":"true",
         "management.endpoint.metrics.enabled":"true"
         }'
