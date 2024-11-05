@@ -32,9 +32,10 @@ services:
     image: prom/mysqld-exporter:main
     container_name: mysqld-exporter
     volumes:
-      - ./config.my-cnf:/cfg/config.my-cnf
+      - ./config.my-cnf:/cfg/.my.cnf  # Fixed volume path
     command:
-      - --config.my-cnf=/cfg/config.my-cnf
+      - --config.my-cnf=/cfg/.my.cnf  # Ensure the config file name is correct
+      - --mysql.address=192.168.207.129:3306
     ports:
       - "9104:9104"
 
