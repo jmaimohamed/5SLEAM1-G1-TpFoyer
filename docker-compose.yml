@@ -13,8 +13,8 @@ services:
       - db_data:/var/lib/mysql
 
   app-foyer:
-    image: tp-foyer-app1
-    container_name: app-foyer1
+    image: tp-foyer-app
+    container_name: app-foyer
     depends_on:
       - mysqldb
     ports:
@@ -32,7 +32,7 @@ services:
     image: prom/mysqld-exporter:main
     container_name: mysqld-exporter
     volumes:
-      - ./config.my-cnf:/cfg/config.my-cnf  # Ensure this path is correct
+      - ./config.my-cnf:/cfg/config.my-cnf
     command:
       - --config.my-cnf=/cfg/config.my-cnf
     ports:
