@@ -31,10 +31,11 @@ services:
   mysqld-exporter:
     image: prom/mysqld-exporter:main
     container_name: mysqld-exporter
-    volumes:
-      - /home/jmaais/.my.cnf:/cfg/.my.cnf
+    environment:
+      DATA_SOURCE_NAME: "root:root@tcp(mysqldb:3306)/"
     ports:
       - "9104:9104"
+
 
 
 
