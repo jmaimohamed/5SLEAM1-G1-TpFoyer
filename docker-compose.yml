@@ -32,7 +32,7 @@ services:
     image: prom/mysqld-exporter:main
     container_name: mysqld-exporter
     volumes:
-      - ~/.my.cnf:/cfg/.my.cnf
+      - /home/jmaais/.my.cnf:/cfg/.my.cnf
     ports:
       - "9104:9104"
 
