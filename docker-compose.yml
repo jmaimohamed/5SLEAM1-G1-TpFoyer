@@ -32,15 +32,11 @@ services:
     image: prom/mysqld-exporter:main
     container_name: mysqld-exporter
     volumes:
-      - ./config.my-cnf:/cfg/config.my-cnf # Ensure this path is correct
+      - ./config.my-cnf:/cfg/config.my-cnf  # Ensure this path is correct
     command:
       - --config.my-cnf=/cfg/config.my-cnf
-    environment:
-      DATA_SOURCE_NAME: "root:root@(mysqldb:3306)/foyer_db" # Connect to MySQL service
     ports:
       - "9104:9104"
-
-
 
 volumes:
   db_data:
