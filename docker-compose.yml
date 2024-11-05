@@ -32,7 +32,7 @@ services:
     image: prom/mysqld-exporter
     container_name: mysql-exporter
     environment:
-      DATA_SOURCE_NAME: "root:root@(mysqldb:3306)/"
+      DATA_SOURCE_NAME: "root:root@(mysqldb:3306)/foyer_db"
     ports:
       - "9104:9104"
 
