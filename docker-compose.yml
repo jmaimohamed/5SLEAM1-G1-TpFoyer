@@ -36,7 +36,8 @@ services:
     ports:
       - "9104:9104"
     volumes:
-      - ./my.cnf:/etc/.my.cnf
+      - ./my.cnf:/root/.my.cnf 
+
 
 
 
