@@ -35,6 +35,9 @@ services:
       DATA_SOURCE_NAME: "root:root@(mysqldb:3306)/foyer_db"
     ports:
       - "9104:9104"
+    volumes:
+      - ./my.cnf:/etc/.my.cnf
+
 
 
 volumes:
