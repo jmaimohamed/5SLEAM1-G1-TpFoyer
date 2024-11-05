@@ -13,8 +13,8 @@ services:
       - db_data:/var/lib/mysql
 
   app-foyer:
-    image: tp-foyer-app
-    container_name: app-foyer
+    image: tp-foyer-app1
+    container_name: app-foyer1
     depends_on:
       - mysqldb
     ports:
@@ -28,16 +28,7 @@ services:
         "spring.jpa.hibernate.ddl-auto": "update"
       }'
 
-  mysqld-exporter:
-    image: prom/mysqld-exporter:main
-    container_name: mysqld-exporter
-    environment:
-      DATA_SOURCE_NAME: "root:root@tcp(mysqldb:3306)/"
-    ports:
-      - "9104:9104"
-
-
-
+  
 
 volumes:
   db_data:
