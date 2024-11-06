@@ -20,8 +20,8 @@ public class UniversiteServiceImpl implements IUniversiteService {
 
 
     // Nouvelle méthode pour rechercher par nom
-    public Universite retrieveByNom(String nom) {
-        return universiteRepository.findByNom(nom).orElse(null);
+    public Universite retrieveByNomUniversite(String nomUniversite) {
+        return universiteRepository.findByNomUniversite(nomUniversite).orElse(null);
     }
 
 
