@@ -2,7 +2,7 @@ version: '3.8'
 services:
   mysqldb:
     image: mysql:8.0
-    container_name: mysqldb
+    ##container_name: mysqldb
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: foyer_db
