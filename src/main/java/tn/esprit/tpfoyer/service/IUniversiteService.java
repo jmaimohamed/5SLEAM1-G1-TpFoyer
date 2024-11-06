@@ -11,7 +11,7 @@ public interface IUniversiteService {
     public Universite addUniversite(Universite f);
     public void removeUniversite(Long universiteId);
     public Universite modifyUniversite(Universite universite);
-    Universite retrieveByNom(String nom);
+    Universite retrieveByNomUniversite(String nomUniversite);
     List<Universite> retrieveByAdresse(String adresse);
 
     // Here we will add later methods calling keywords and methods calling JPQL
