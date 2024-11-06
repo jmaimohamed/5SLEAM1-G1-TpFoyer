@@ -32,16 +32,14 @@ services:
     image: prom/mysqld-exporter
     container_name: mysqld-exporter
     depends_on:
-      - mysql
+      - mysqldb  # Correct the service name here from `mysql` to `mysqldb`
     command:
-      - --config.my-cnf=/cfg/..my.cnf
+      - --config.my-cnf=/cfg/.my.cnf  # Correct the file path here
       - --mysqld.address=localhost:3306
     volumes:
-      - ./ ..my.cnf:/cfg/..my.cnf
+      - ./my.cnf:/cfg/.my.cnf  # Correct the path to your `.my.cnf` file
     ports:
       - "9104:9104"
-
-
 
 volumes:
   db_data:
