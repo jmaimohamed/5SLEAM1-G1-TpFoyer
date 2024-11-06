@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface UniversiteRepository extends JpaRepository<Universite, Long>
 {
-    Optional<Universite> findByNom(String nomUniversite);
+    Optional<Universite> findByNomUniversite(String nomUniversite);
     List<Universite> findByAdresse(String adresse);
 
 
