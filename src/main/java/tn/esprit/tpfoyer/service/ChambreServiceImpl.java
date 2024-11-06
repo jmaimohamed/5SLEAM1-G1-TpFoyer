@@ -8,6 +8,7 @@ import tn.esprit.tpfoyer.entity.TypeChambre;
 import tn.esprit.tpfoyer.repository.ChambreRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -41,8 +42,51 @@ public class ChambreServiceImpl implements IChambreService {
         chambreRepository.deleteById(chambreId);
     }
 
-    public List<Chambre> recupererChambresSelonTyp(TypeChambre tc) {
+
+
+
+    public void removeAllChambres() {
+        chambreRepository.deleteAll();
+    }
+
+
+
+
+    public List<Chambre> recupererChambresSelonTyp(TypeChambre tc)
+    {
         return chambreRepository.findAllByTypeC(tc);
+    }
+
+    @Override
+    // Réserver une chambre disponible
+    public Chambre reserverChambreDisponible(TypeChambre typeChambre) {
+        List<Chambre> chambresDisponibles = chambreRepository.findAllByTypeC(typeChambre)
+                .stream()
+                .filter(Chambre::isDisponible)  // Filtrer les chambres disponibles
+                .collect(Collectors.toList());
+
+        if (!chambresDisponibles.isEmpty()) {
+            Chambre chambre = chambresDisponibles.get(0);  // Prendre la première chambre disponible
+            chambre.setDisponible(false);  // Marquer comme non disponible
+            chambreRepository.save(chambre);  // Sauvegarder l'état de la chambre
+            return chambre;
+        } else {
+            throw new RuntimeException("Aucune chambre disponible de ce type");
+        }
+    }
+
+    // Libérer une chambre
+    @Override
+    public Chambre libererChambre(Long numeroChambre) {
+        Chambre chambre = chambreRepository.findChambreByNumeroChambre(numeroChambre);
+
+        if (chambre != null) {
+            chambre.setDisponible(true);  // Libérer la chambre
+            chambreRepository.save(chambre);  // Sauvegarder les modifications
+            return chambre;
+        } else {
+            throw new RuntimeException("Chambre avec le numéro " + numeroChambre + " non trouvée");
+        }
     }
 
     public Chambre trouverchambreSelonEtudiant(long cin) {

@@ -17,5 +17,10 @@ public interface IChambreService {
     public Chambre trouverchambreSelonEtudiant(long Cin);
 
     public List<Chambre> recupererChambresSelonTyp(TypeChambre tc);
+    public void removeAllChambres() ;
+    public Chambre reserverChambreDisponible(TypeChambre typeChambre) ;
+
+
+    Chambre libererChambre(Long numeroChambre);
 
 }
