@@ -11,7 +11,7 @@ WORKDIR /app
 COPY target/tp-foyer-5.2.1.jar /app/tp-foyer-5.2.1.jar
 
 # Expose the application port
-EXPOSE 8089
+EXPOSE 8082
 
 # Define the entry point for the application
 ENTRYPOINT ["java", "-jar", "/app/tp-foyer-5.2.1.jar"]
