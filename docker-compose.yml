@@ -28,6 +28,18 @@ services:
         "spring.jpa.hibernate.ddl-auto": "update"
       }'
 
+  mysql-exporter:
+    image: prom/mysqld-exporter
+    container_name: mysqld-exporter
+    depends_on:
+      - mysql
+    command:
+      - --config.my-cnf=/cfg/..my.cnf
+      - --mysqld.address=localhost:3306
+    volumes:
+      - ./ ..my.cnf:/cfg/..my.cnf
+    ports:
+      - "9104:9104"
 
 
 
