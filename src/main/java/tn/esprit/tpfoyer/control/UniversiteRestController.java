@@ -30,8 +30,8 @@ public class UniversiteRestController {
     }
     // Nouveau point d’accès pour rechercher par nom
     @GetMapping("/retrieve-universite-by-nom/{nom}")
-    public Universite retrieveUniversiteByNom(@PathVariable("nom") String nom) {
-        return universiteService.retrieveByNom(nom);
+    public Universite retrieveUniversiteByNomUniversite(@PathVariable("nom") String nomUniversite) {
+        return universiteService.retrieveByNomUniversite(nomUniversite);
     }
 
 
