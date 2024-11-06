@@ -12,7 +12,7 @@ services:
       - db_data:/var/lib/mysql
   app-foyer:
     image: fatma612/tp-foyer-5.0.0
-    container_name: app-foyer
+    #container_name: app-foyer
     depends_on:
       - mysqldb
     ports:
