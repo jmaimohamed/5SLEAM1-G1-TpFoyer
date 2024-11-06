@@ -12,7 +12,7 @@
     <artifactId>tp-foyer-Integration</artifactId>
     <version>5.2.1</version>
     <name>tp-foyer-Integration</name>
-    <description>tp-foyer-Integartion</description>
+    <description>tp-foyer-Integration</description>
     <properties>
         <java.version>17</java.version>
     </properties>

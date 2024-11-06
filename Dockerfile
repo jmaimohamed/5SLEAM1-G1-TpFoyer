@@ -8,11 +8,11 @@ ENV SPRING_PROFILES_ACTIVE=prod
 WORKDIR /app
 
 # Copy the JAR file from the local machine to the Docker image
-COPY target/tp-foyer-5.2.1.jar /app/tp-foyer-5.2.1.jar
+COPY target/tp-foyer-Integration-5.2.1.jar /app/tp-foyer-Integration-5.2.1.jar
 
 # Expose the application port
 EXPOSE 8082
 
 # Define the entry point for the application
-ENTRYPOINT ["java", "-jar", "/app/tp-foyer-5.2.1.jar"]
+ENTRYPOINT ["java", "-jar", "/app/tp-foyer-Integration-5.2.1.jar"]
 
