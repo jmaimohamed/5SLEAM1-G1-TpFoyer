@@ -72,6 +72,7 @@
             <version>3.0.0</version>
         </dependency>
         <dependency>
+
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
             <scope>test</scope>
@@ -87,7 +88,6 @@
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
         </dependency>
-
 
     </dependencies>
     <repositories>
@@ -120,6 +120,7 @@
         </repository>
         <snapshotRepository>
             <id>deploymentRepo</id>
+
             <url>http://192.168.207.129:8081/repository/maven-snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
