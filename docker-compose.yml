@@ -37,6 +37,8 @@ services:
       - mysqldb
     ports:
       - "9104:9104"
+    volumes:
+      - ./my.cnf:/root/.my.cnf
 
 volumes:
   db_data:
