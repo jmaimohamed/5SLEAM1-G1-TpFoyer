@@ -1,6 +1,5 @@
 package tn.esprit.tpfoyer.service;
 
-
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,31 +18,30 @@ public class ChambreServiceImpl implements IChambreService {
     ChambreRepository chambreRepository;
 
     public List<Chambre> retrieveAllChambres() {
-        log.info("In Methodo retrieveAllChambres : ");
+        log.info("In Method retrieveAllChambres: ");
         List<Chambre> listC = chambreRepository.findAll();
-        log.info("Out of retrieveAllChambres : ");
+        log.info("Out of retrieveAllChambres: ");
 
         return listC;
     }
 
     public Chambre retrieveChambre(Long chambreId) {
-        Chambre c = chambreRepository.findById(chambreId).get();
-        return c;
+        return chambreRepository.findById(chambreId)
+                .orElseThrow(() -> new RuntimeException("Chambre not found with id: " + chambreId));
     }
 
     public Chambre addChambre(Chambre c) {
-        Chambre chambre = chambreRepository.save(c);
-        return chambre;
+        return chambreRepository.save(c);
     }
 
     public Chambre modifyChambre(Chambre c) {
-        Chambre chambre = chambreRepository.save(c);
-        return c;
+        return chambreRepository.save(c);
     }
 
     public void removeChambre(Long chambreId) {
         chambreRepository.deleteById(chambreId);
     }
+
 
 
 
@@ -91,10 +89,7 @@ public class ChambreServiceImpl implements IChambreService {
         }
     }
 
-
     public Chambre trouverchambreSelonEtudiant(long cin) {
-       //
-
         return chambreRepository.trouverChselonEt(cin);
     }
 }
