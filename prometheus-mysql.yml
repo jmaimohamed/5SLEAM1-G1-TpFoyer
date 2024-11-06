@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  mysql-exporter:
+    image: prom/mysqld-exporter
+    depends_on:
+      - mysqldb
+    command:
+      - --config.my-cnf=/cfg/.my.cnf  # Make sure the path matches with the main docker-compose.yml file
+      - --mysqld.address=localhost:3306
+    volumes:
+      - ./.my.cnf:/cfg/.my.cnf  # Ensure the path to .my.cnf is correct
+    ports:
+      - "9104:9104"
