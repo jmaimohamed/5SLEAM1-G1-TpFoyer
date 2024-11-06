@@ -32,13 +32,14 @@ services:
     image: prom/mysqld-exporter:main
     container_name: mysqld-exporter
     environment:
-      DATA_SOURCE_NAME: "root:root@tcp(mysqldb:3306)/foyer_db"
+      DATA_SOURCE_NAME: "root:root@tcp(192.168.207.129:3306)/foyer_db"
     depends_on:
       - mysqldb
     ports:
       - "9104:9104"
     volumes:
-      - ./my.cnf:/root/.my.cnf
+      - ./.my.cnf:/root/.my.cnf
+
 
 volumes:
   db_data:
