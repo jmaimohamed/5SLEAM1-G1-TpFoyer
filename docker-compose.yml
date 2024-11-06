@@ -12,7 +12,7 @@ services:
       - my-network
 
   spring-boot-app:
-    image: hajer421/backend18
+    image: hajer421/backend20
     container_name: docker-compose-spring-boot
     ports:
       - "8088:8089"
